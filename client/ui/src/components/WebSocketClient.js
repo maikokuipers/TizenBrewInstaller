@@ -20,6 +20,34 @@ class Client {
         this.socket.onopen = this.onOpen.bind(this);
         this.socket.onmessage = this.onMessage.bind(this);
         this.socket.onerror = () => location.reload();
+        this.listeners = [];
+    }
+
+    // Calls listener with every message from the service. Returns a function that removes it.
+    listen(listener) {
+        this.listeners.push(listener);
+        return () => {
+            this.listeners = this.listeners.filter(l => l !== listener);
+        };
+    }
+
+    // Resolves with the first message for which accept returns true.
+    wait(accept) {
+        return new Promise(resolve => {
+            const stop = this.listen(message => {
+                if (accept(message)) {
+                    stop();
+                    resolve(message);
+                }
+            });
+        });
+    }
+
+    // Sends an event and resolves with the first reply for which accept returns true.
+    request(data, accept) {
+        const reply = this.wait(accept);
+        this.send(data);
+        return reply;
     }
 
     onOpen() {
@@ -28,6 +56,7 @@ class Client {
     onMessage(event) {
         const data = JSON.parse(event.data);
         const { type, payload } = data;
+        this.listeners.slice().forEach(listener => listener(data));
 
         switch (type) {
             case Events.InstallPackage: {

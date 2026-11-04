@@ -41,12 +41,17 @@ module.exports.onStart = function () {
     if (!isTV) {
         // Enable static file serving for frontend
         console.log('Open up http://localhost:8091/ui/dist/index.html to access the TizenBrew Installer.');
+        // Open the setup wizard in the default browser. Set TBI_NO_BROWSER=1 to skip.
+        if (!process.env.TBI_NO_BROWSER) {
+            const opener = process.platform === 'darwin' ? 'open' : process.platform === 'win32' ? 'start ""' : 'xdg-open';
+            require('child_process').exec(`${opener} http://localhost:8091/ui/dist/index.html`, () => { });
+        }
         if (existsSync(`${process.platform === 'win32' ? 'C:\\' : '/'}snapshot/client`)) {
             app.use(express.static(`${process.platform === 'win32' ? 'C:\\' : '/'}snapshot/client`));
         } else app.use(express.static(join(__dirname, '../../')));
     }
 
-    app.get('/ui/dist/index.html/desktop', (_, res) => {
+    app.get(['/ui/dist/index.html/desktop', '/ui/dist/index.html/advanced'], (_, res) => {
         if (existsSync(`${process.platform === 'win32' ? 'C:\\' : '/'}snapshot/client`)) {
             res.sendFile(`${process.platform === 'win32' ? 'C:\\' : '/'}snapshot/client/ui/dist/index.html`);
         } else res.sendFile((join(__dirname, '../../ui/dist/index.html')));
@@ -371,6 +376,88 @@ module.exports.onStart = function () {
             uiSink.send(uiSink.Event(Events.Received, { name: req.get('X-Package-Name') || 'package' }));
             if (!checkPrecondition(conn)) return;
             resignOrInstall(conn, req.body, 'network');
+        });
+    }
+
+    if (!isTV) {
+        const { networkInterfaces } = require('os');
+        const net = require('net');
+
+        // IPv4 addresses of this computer, so the setup wizard can tell which one to enter as Host PC IP.
+        function localAddresses() {
+            const addresses = [];
+            const interfaces = networkInterfaces();
+            Object.keys(interfaces).forEach(name => {
+                (interfaces[name] || []).forEach(address => {
+                    if (address.family === 'IPv4' && !address.internal) addresses.push(address.address);
+                });
+            });
+            return addresses;
+        }
+
+        // Samsung TVs report their Developer mode settings on port 8001, no pairing needed.
+        function readTv(ip, timeout) {
+            return fetch(`http://${ip}:8001/api/v2/`, { timeout: timeout || 1500 })
+                .then(res => res.json())
+                .then(json => {
+                    const device = json.device || {};
+                    if (device.OS !== 'Tizen') return null;
+                    const year = Number((device.model || '').split('_')[0]);
+                    return {
+                        ip,
+                        name: device.name || json.name || 'Samsung TV',
+                        modelName: device.modelName || '',
+                        year: year ? 2000 + year : null,
+                        frame: device.FrameTVSupport === 'true',
+                        powerState: device.PowerState || 'unknown',
+                        developerMode: device.developerMode === '1',
+                        developerIP: device.developerIP || ''
+                    };
+                })
+                .catch(() => null);
+        }
+
+        function isPortOpen(ip, port) {
+            return new Promise(resolve => {
+                const socket = net.connect({ host: ip, port });
+                const finish = (open) => {
+                    socket.destroy();
+                    resolve(open);
+                };
+                socket.setTimeout(1500, () => finish(false));
+                socket.on('connect', () => finish(true));
+                socket.on('error', () => finish(false));
+            });
+        }
+
+        // The address of this computer on the TV's network.
+        function computerAddressFor(ip) {
+            const prefix = ip.split('.').slice(0, 3).join('.');
+            const addresses = localAddresses();
+            return addresses.find(address => address.indexOf(prefix + '.') === 0) || addresses[0] || null;
+        }
+
+        app.get('/api/wizard/tvs', (_, res) => {
+            const prefixes = [];
+            localAddresses().forEach(address => {
+                const prefix = address.split('.').slice(0, 3).join('.');
+                if (prefixes.indexOf(prefix) === -1) prefixes.push(prefix);
+            });
+            const lookups = [];
+            prefixes.forEach(prefix => {
+                for (let i = 1; i < 255; i++) lookups.push(readTv(`${prefix}.${i}`));
+            });
+            Promise.all(lookups).then(tvs => {
+                res.json({ tvs: tvs.filter(Boolean), computer: localAddresses() });
+            });
+        });
+
+        app.get('/api/wizard/tv', (req, res) => {
+            const ip = String(req.query.ip || '');
+            if (!/^\d{1,3}(\.\d{1,3}){3}$/.test(ip)) return res.status(400).json({ error: 'Invalid IP' });
+            Promise.all([readTv(ip, 3000), isPortOpen(ip, 26101)]).then(([tv, sdbOpen]) => {
+                res.json({ tv, sdbOpen, computer: computerAddressFor(ip), connected: !!(adbClient && isConnected) });
+            });
         });
     }
 

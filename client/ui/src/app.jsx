@@ -13,6 +13,10 @@ import './components/i18n.js';
 import { ExclamationCircleIcon } from '@heroicons/react/16/solid';
 import { useTranslation } from 'react-i18next';
 import Desktop from './pages/Desktop.jsx';
+import Wizard from './pages/Wizard.jsx';
+
+// On a computer the installer opens as a setup wizard; the TV keeps its own screens.
+const isDesktop = typeof tizen === 'undefined';
 
 export default function App() {
   const headerRef = useRef(null);
@@ -36,7 +40,7 @@ export default function App() {
     }
   }, [context.state.sharedData.error.disappear]);
   useEffect(() => {
-    setHeaderHeight(headerRef.current.base.clientHeight);
+    if (headerRef.current) setHeaderHeight(headerRef.current.base.clientHeight);
   }, [headerRef]);
 
   useEffect(() => {
@@ -46,6 +50,10 @@ export default function App() {
     }
   }, []);
 
+
+  if (isDesktop && !location.pathname.endsWith('/advanced')) {
+    return <Wizard />;
+  }
 
   return (
     <ErrorBoundary>
@@ -63,6 +71,7 @@ export default function App() {
           <Router>
             <Route component={Home} path="/ui/dist/index.html" />
             <Route component={Desktop} path="/ui/dist/index.html/desktop" />
+            <Route component={Desktop} path="/ui/dist/index.html/advanced" />
             <Route component={InstallFromGitHub} path="/ui/dist/index.html/install-from-gh" />
             <Route component={InstallFromUSB} path="/ui/dist/index.html/install-from-usb" />
             <Route component={About} path="/ui/dist/index.html/about" />

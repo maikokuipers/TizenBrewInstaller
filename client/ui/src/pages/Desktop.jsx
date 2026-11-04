@@ -137,7 +137,7 @@ export default function Desktop() {
                             }}
                             onBlur={(e) => {
                                 if (ip) {
-                                    state.client.send({
+                                    context.state.client.send({
                                         type: Events.ConnectToTV,
                                         payload: ip
                                     });

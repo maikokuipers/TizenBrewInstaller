@@ -8,6 +8,19 @@ TizenBrew Installer allows you to install TizenBrew and other Tizen apps easily,
 
 To install TizenBrew Installer, you'll need a PC or a mobile device. Since Samsung has shut down the service for the USB Demo Package creation, the only way is using TizenBrew Installer Desktop.
 
+## Setup wizard (first install)
+
+Download TizenBrew Installer for your computer from the [releases](https://github.com/maikokuipers/TizenBrewInstaller/releases/latest)
+and open it. A setup wizard opens in your browser and walks you through it:
+
+1. **Choose TV**: finds the Samsung TVs on your network.
+2. **Developer mode**: shows what to enter on the TV and checks the TV's settings live.
+3. **Restart**: waits until the TV accepts this computer (with the Frame TV Art Mode pitfall explained).
+4. **Install**: TizenBrew Installer, TizenBrew with TizenTube and Streamy. Tizen 7+ TVs sign in to a Samsung account once.
+5. **Finish**: set the Host PC IP back to `127.0.0.1`. From then on you install everything from the TV.
+
+The old screen is still at http://localhost:8091/ui/dist/index.html/advanced.
+
 ## Install from your computer without changing the Host PC IP
 
 TizenBrew needs the Host PC IP in Developer mode set to `127.0.0.1`. Normally you have to change it to your
