@@ -1,4 +1,4 @@
-import { ArrowDownIcon, ArrowPathIcon } from '@heroicons/react/16/solid';
+import { ArrowDownIcon, ArrowPathIcon, ComputerDesktopIcon } from '@heroicons/react/16/solid';
 import { useContext } from 'react';
 import { GlobalStateContext } from '../components/ClientContext.jsx';
 import Item from '../components/Item.jsx';
@@ -89,6 +89,16 @@ export default function Home() {
                                 {t('installer.installTB')}
                             </span>
                         )}
+                    </h3>
+                </Item>
+                <Item onClick={() => {
+                    loc.route('/ui/dist/index.html/receive');
+                }}>
+                    <h3 className='text-indigo-400 text-base/7 font-semibold'>
+                        <span className='flex items-center gap-2'>
+                            <ComputerDesktopIcon className='h-8 w-8 text-indigo-400' />
+                            {t('installer.receiveFromComputer')}
+                        </span>
                     </h3>
                 </Item>
                 <Item onClick={() => {

@@ -1,34 +1,60 @@
 {
     "service": {
-        "alreadyRunning": "Service is al draaiend.",
+        "alreadyRunning": "Service draait al.",
         "started": "Service gestart."
     },
     "errors": {
-        "debuggingNotEnabled": "Error: Kan geen verbinding maken met SDB Daemon. Weet je zeker dat je de Host PC IP naar 127.0.0.1? Als je dat hebt gedaan, houd de Aan/Uit-knop ingedrukt tot je het Samsung logo."
+        "debuggingNotEnabled": "Geen verbinding met de SDB Daemon. Zet in Developer mode het Host PC IP op 127.0.0.1 (Apps, dan 12345). Houd daarna de aan/uit-knop ingedrukt tot je het Samsung-logo ziet. Op een Frame-tv zet kort drukken de tv alleen in Art mode.",
+        "stillChecking": "De instellingen van Developer mode worden nog gecontroleerd. Probeer het over een paar seconden opnieuw."
     },
     "installStatus": {
         "fetching": "Pakket ophalen",
-        "resigning": "Pakket hersigneren",
-        "parsing": "Pakket parseren",
-        "installing": "Pakket Installeren",
-        "installed": "Pakket geinstalleerd",
+        "resigning": "Pakket opnieuw ondertekenen",
+        "parsing": "Pakket lezen",
+        "installing": "Pakket installeren",
+        "installed": "Pakket geïnstalleerd",
         "installFailed": "Installatie mislukt: {{line}}"
     },
     "resigning": {
-        "resigningRequired": "Hersigneren vereist",
-        "resigningRequiredDesc": "Vanaf Tizen 7 moeten alle pakketten hersigned worden met een Samsung Certificate.\nScan de QR-code om in te loggen op uw Samsung-account en kopieer de JSON-antwoord die u krijgt na inloggen.",
-        "resigningRequiredAccessInfo": "Nadat u het JSON-antwoord hebt gekopieerd, ga naar http://{{ip}}:4794 en plak het in het tekstveld en druk op de \"Submit\" Knop.",
-        "resigningDeviceSameNetwork": "Zorg ervoor dat uw apparaat op het zelfde netwerk is als uw TV."
+        "resigningRequired": "Opnieuw ondertekenen nodig",
+        "resigningRequiredDesc": "Vanaf Tizen 7 moet elk pakket ondertekend zijn met een Samsung-certificaat.\nScan de QR-code, log in met je Samsung-account en kopieer het JSON-antwoord dat je daarna krijgt.",
+        "resigningRequiredPCDesc": "Vanaf Tizen 7 moet elk pakket ondertekend zijn met een Samsung-certificaat.\nKlik op de knop hieronder om in te loggen met je Samsung-account.",
+        "resigningRequiredOpenAuthButton": "Inloggen met Samsung-account",
+        "resigningRequiredAccessInfo": "Ga na het kopiëren naar http://{{ip}}:4794, plak het JSON-antwoord in het tekstveld en druk op \"Submit\".",
+        "resigningDeviceSameNetwork": "Zorg dat je apparaat op hetzelfde netwerk zit als je tv."
     },
     "installer": {
         "installTB": "TizenBrew installeren",
-        "updateTB": "TizenBrew updaten",
-        "installFromUSB": "Installeren van USB",
-        "installFromGH": "Installeren van GitHub",
-        "installingAgain": "TizenBrew Installer is geinstalleerd als een USB Demo Package. Het zal nu worden geinstalleerd als een normaal pakket.",
-        "alreadyInstalled": "TizenBrew Installer als een USB Demo Package is geinstalleerd. U kunt het nu verwijderen."
+        "installTBI": "TizenBrew Installer installeren",
+        "connectToTV": "Verbinden met tv",
+        "updateTB": "TizenBrew bijwerken",
+        "installFromUSB": "Installeren vanaf USB",
+        "installFromGH": "Installeren vanaf GitHub of URL",
+        "installFromGHPlaceholder": "reisxd/TizenBrew of https://voorbeeld.nl/app.wgt",
+        "receiveFromComputer": "Ontvangen van computer",
+        "selectToInstall": "Kies een bestand om te installeren",
+        "installingAgain": "TizenBrew Installer is geïnstalleerd als USB Demo Package. Hij wordt nu opnieuw geïnstalleerd als gewoon pakket.",
+        "alreadyInstalled": "TizenBrew Installer staat ook nog als USB Demo Package op de tv. Die kun je nu verwijderen."
+    },
+    "installerDesktop": {
+        "sdbConnectionRefused": "Geen verbinding met de SDB Daemon. Controleer of de tv aan staat en of het IP-adres klopt.",
+        "sdbConnectionReset": "Geen verbinding met de SDB Daemon. Staat bij Host PC IP het IP-adres van deze computer? Herstart de tv daarna door de aan/uit-knop ingedrukt te houden tot je het Samsung-logo ziet. Op een Frame-tv zet kort drukken de tv alleen in Art mode."
+    },
+    "receive": {
+        "title": "Ontvangen van computer",
+        "description": "Installeer een app vanaf een computer op hetzelfde netwerk. Het Host PC IP kan gewoon op 127.0.0.1 blijven staan.",
+        "tvAddress": "Adres van deze tv",
+        "pairingCode": "Koppelcode",
+        "command": "Voer op je computer uit:",
+        "receiving": "Pakket ontvangen",
+        "wrongCode": "Verkeerde koppelcode. Je vindt hem op de tv onder Ontvangen van computer.",
+        "tooManyAttempts": "Te vaak een verkeerde koppelcode. Probeer het over een minuut opnieuw.",
+        "busy": "De tv is al een pakket aan het installeren. Probeer het opnieuw als dat klaar is.",
+        "emptyPackage": "Het pakket is leeg.",
+        "certificateRequired": "Deze tv heeft eerst een Samsung-certificaat nodig. Open TizenBrew Installer op de tv en installeer één keer iets om het aan te maken."
     },
     "__contributors": [
-        "owen-the-kid"
+        "owen-the-kid",
+        "maikokuipers"
     ]
 }

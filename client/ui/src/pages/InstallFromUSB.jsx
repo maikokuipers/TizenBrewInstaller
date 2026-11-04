@@ -4,10 +4,12 @@ import { useLocation } from "preact-iso";
 import { setFocus, useFocusable } from "@noriginmedia/norigin-spatial-navigation";
 import { FolderIcon, DocumentIcon } from "@heroicons/react/16/solid";
 import { Events } from "../components/WebSocketClient.js";
+import { useTranslation } from "react-i18next";
 
 export default function InstallFromUSB() {
     const { state } = useContext(GlobalStateContext);
     const loc = useLocation();
+    const { t } = useTranslation();
 
 
     useEffect(() => {
@@ -25,7 +27,7 @@ export default function InstallFromUSB() {
 
     return (
         <div className="min-h-screen flex flex-col items-center px-2 pt-8">
-            <h1 className="text-3xl font-bold text-indigo-400 mb-8 text-center w-full">Install From USB</h1>
+            <h1 className="text-3xl font-bold text-indigo-400 mb-8 text-center w-full">{t('installer.installFromUSB')}</h1>
             <div className="w-full max-w-2xl rounded-lg shadow-md p-6 bg-slate-900 flex flex-col items-center">
                 <ul className="space-y-3 w-full">
                     {state.sharedData.directory.map((file, idx) => {

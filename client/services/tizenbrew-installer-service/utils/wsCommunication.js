@@ -23,7 +23,9 @@ const Events = {
     InstallationStatus: 4,
     DeleteConfiguration: 5,
     ConnectToTV: 6,
-    InstallFile: 7
+    InstallFile: 7,
+    GetPairingInfo: 8,
+    Received: 9
 };
 
 module.exports = {

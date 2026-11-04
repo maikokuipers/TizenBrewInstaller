@@ -8,6 +8,7 @@ import Client from './components/WebSocketClient.js';
 import InstallFromGitHub from './pages/InstallFromGitHub.jsx';
 import InstallFromUSB from './pages/InstallFromUSB.jsx';
 import About from './pages/About.jsx';
+import ReceiveFromComputer from './pages/ReceiveFromComputer.jsx';
 import './components/i18n.js';
 import { ExclamationCircleIcon } from '@heroicons/react/16/solid';
 import { useTranslation } from 'react-i18next';
@@ -65,6 +66,7 @@ export default function App() {
             <Route component={InstallFromGitHub} path="/ui/dist/index.html/install-from-gh" />
             <Route component={InstallFromUSB} path="/ui/dist/index.html/install-from-usb" />
             <Route component={About} path="/ui/dist/index.html/about" />
+            <Route component={ReceiveFromComputer} path="/ui/dist/index.html/receive" />
           </Router>
         </div>
       </LocationProvider>

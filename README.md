@@ -8,6 +8,23 @@ TizenBrew Installer allows you to install TizenBrew and other Tizen apps easily,
 
 To install TizenBrew Installer, you'll need a PC or a mobile device. Since Samsung has shut down the service for the USB Demo Package creation, the only way is using TizenBrew Installer Desktop.
 
+## Install from your computer without changing the Host PC IP
+
+TizenBrew needs the Host PC IP in Developer mode set to `127.0.0.1`. Normally you have to change it to your
+computer's IP to install your own apps, and back again afterwards. With "Receive from computer" that's no
+longer needed: the TV installs the package itself.
+
+1. Open TizenBrew Installer on the TV and choose **Receive from computer**. It shows the TV's address and a
+   pairing code.
+2. On your computer (Node.js 18+), run:
+
+   ```
+   node cli/send-to-tv.mjs [tv-ip] path/to/app.wgt
+   ```
+
+   Without an IP the script searches the local network. It asks for the pairing code once and saves it in
+   `~/.config/tizenbrew-installer/tvs.json`. You can also pass a link: `node cli/send-to-tv.mjs https://example.com/app.wgt`.
+
 ## TizenBrew Installer Desktop
 
 TizenBrew Installer Desktop is TizenBrew Installer on your PC or (Android only) mobile device. Download the latest release from the [releases section](https://github.com/reisxd/TizenBrewInstaller/releases/latest).

@@ -3,6 +3,7 @@ import { GlobalStateContext } from '../components/ClientContext.jsx';
 import { useLocation } from 'preact-iso';
 import { setFocus } from '@noriginmedia/norigin-spatial-navigation';
 import { Events } from '../components/WebSocketClient.js';
+import { useTranslation } from 'react-i18next';
 
 import Item from "../components/Item.jsx";
 
@@ -11,6 +12,7 @@ export default function InstallFromGitHub() {
     const loc = useLocation();
     const { state } = useContext(GlobalStateContext);
     const ref = useRef(null);
+    const { t } = useTranslation();
 
     useEffect(() => {
         ref.current.focus();
@@ -43,7 +45,7 @@ export default function InstallFromGitHub() {
                             loc.route('/ui/dist/index.html');
                             setFocus('sn:focusable-item-1');
                         }}
-                        placeholder="reisxd/TizenBrew"
+                        placeholder={t('installer.installFromGHPlaceholder')}
                     />
                 </Item>
             </div>

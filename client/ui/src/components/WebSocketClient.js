@@ -7,7 +7,9 @@ const Events = {
     InstallationStatus: 4,
     DeleteConfiguration: 5,
     ConnectToTV: 6,
-    InstallFile: 7
+    InstallFile: 7,
+    GetPairingInfo: 8,
+    Received: 9
 };
 
 class Client {
@@ -87,6 +89,22 @@ class Client {
                 this.context.dispatch({
                     type: 'SET_STATE',
                     payload: payload
+                });
+                break;
+            }
+
+            case Events.GetPairingInfo: {
+                this.context.dispatch({
+                    type: 'SET_PAIRING',
+                    payload: payload
+                });
+                break;
+            }
+
+            case Events.Received: {
+                this.context.dispatch({
+                    type: 'SET_STATE',
+                    payload: 'receive.receiving'
                 });
                 break;
             }
