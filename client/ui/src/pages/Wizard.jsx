@@ -96,6 +96,11 @@ export default function Wizard() {
         }).catch(() => { });
     });
 
+    // Let go of the TV once everything is installed, so TizenBrew on the TV can use Developer mode.
+    useEffect(() => {
+        if (step === 'reset' || step === 'done') fetch('/api/wizard/disconnect', { method: 'POST' }).catch(() => { });
+    }, [step]);
+
     // Reset: wait until the Host PC IP is 127.0.0.1 again.
     usePolling(step === 'reset', 2500, () => {
         return getJson(`/api/wizard/tv?ip=${ip}`).then(result => {

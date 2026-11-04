@@ -80,6 +80,10 @@ module.exports.onStart = function () {
                         adbClient._stream.removeAllListeners('connect');
                         adbClient._stream.removeAllListeners('error');
                         adbClient._stream.removeAllListeners('close');
+                        // Close the previous connection: the TV accepts only one at a time.
+                        adbClient._stream.on('error', () => { });
+                        adbClient._stream.end();
+                        adbClient._stream.destroy();
                     }
                 }
 
@@ -450,6 +454,18 @@ module.exports.onStart = function () {
             Promise.all(lookups).then(tvs => {
                 res.json({ tvs: tvs.filter(Boolean), computer: localAddresses() });
             });
+        });
+
+        // Releases the TV after installing: it accepts one SDB connection at a time, and TizenBrew
+        // on the TV needs it once the Host PC IP is 127.0.0.1.
+        app.post('/api/wizard/disconnect', (_, res) => {
+            if (adbClient && adbClient._stream) {
+                adbClient._stream.end();
+                adbClient._stream.destroy();
+            }
+            adbClient = null;
+            isConnected = false;
+            res.json({ ok: true });
         });
 
         app.get('/api/wizard/tv', (req, res) => {
