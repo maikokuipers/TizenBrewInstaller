@@ -295,6 +295,22 @@ module.exports.onStart = function () {
             });
     }
 
+    // Enables a module in TizenBrew (same file and defaults as TizenBrew itself).
+    // Also works before TizenBrew is installed: it reads the file on its first start.
+    const tizenBrewConfigPath = '/home/owner/share/tizenbrewConfig.json';
+    function enableTizenBrewModule(module) {
+        let config = {
+            modules: ['npm/@foxreis/tizentube'],
+            autoLaunchServiceList: [],
+            autoLaunchModule: ''
+        };
+        if (existsSync(tizenBrewConfigPath)) config = JSON.parse(readFileSync(tizenBrewConfigPath, 'utf8'));
+        if (!config.modules) config.modules = [];
+        if (config.modules.indexOf(module) === -1) config.modules.push(module);
+        if (!existsSync(dirname(tizenBrewConfigPath))) mkdirRecursive(dirname(tizenBrewConfigPath));
+        writeFileSync(tizenBrewConfigPath, JSON.stringify(config, null, 4));
+    }
+
     // Pairing code for installs from another device on the network. Stays the same across restarts,
     // so a computer only has to enter it once.
     function getPairingCode() {
@@ -420,6 +436,15 @@ module.exports.onStart = function () {
                     config.password = null;
                     writeConfig(config);
                     wsConn.send(wsConn.Event(Events.DeleteConfiguration, null));
+                    break;
+                }
+                case Events.EnableModule: {
+                    try {
+                        if (isTV) enableTizenBrewModule(payload);
+                        wsConn.send(wsConn.Event(Events.EnableModule, { ok: true, module: payload }));
+                    } catch (e) {
+                        wsConn.send(wsConn.Event(Events.Error, `Error enabling module: ${e.message}`));
+                    }
                     break;
                 }
                 case Events.GetPairingInfo: {

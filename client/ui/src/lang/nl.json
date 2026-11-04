@@ -13,7 +13,8 @@
         "parsing": "Pakket lezen",
         "installing": "Pakket installeren",
         "installed": "Pakket geïnstalleerd",
-        "installFailed": "Installatie mislukt: {{line}}"
+        "installFailed": "Installatie mislukt: {{line}}",
+        "moduleEnabled": "TizenTube staat aan. Open TizenBrew om hem te starten."
     },
     "resigning": {
         "resigningRequired": "Opnieuw ondertekenen nodig",
@@ -56,5 +57,13 @@
     "__contributors": [
         "owen-the-kid",
         "maikokuipers"
-    ]
+    ],
+    "apps": {
+        "installStreamy": "Streamy installeren",
+        "updateStreamy": "Streamy bijwerken",
+        "streamyDesc": "Je IPTV, films en series",
+        "tizenTube": "TizenTube",
+        "tizenTubeDesc": "YouTube zonder reclame. Zet hem aan in TizenBrew.",
+        "tizenTubeDescInstall": "YouTube zonder reclame. Installeert TizenBrew met TizenTube."
+    }
 }

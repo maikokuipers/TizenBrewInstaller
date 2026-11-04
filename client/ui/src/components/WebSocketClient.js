@@ -9,7 +9,8 @@ const Events = {
     ConnectToTV: 6,
     InstallFile: 7,
     GetPairingInfo: 8,
-    Received: 9
+    Received: 9,
+    EnableModule: 10
 };
 
 class Client {
@@ -97,6 +98,14 @@ class Client {
                 this.context.dispatch({
                     type: 'SET_PAIRING',
                     payload: payload
+                });
+                break;
+            }
+
+            case Events.EnableModule: {
+                this.context.dispatch({
+                    type: 'SET_STATE',
+                    payload: 'installStatus.moduleEnabled'
                 });
                 break;
             }

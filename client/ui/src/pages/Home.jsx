@@ -1,4 +1,4 @@
-import { ArrowDownIcon, ArrowPathIcon, ComputerDesktopIcon } from '@heroicons/react/16/solid';
+import { ArrowDownIcon, ArrowPathIcon, ComputerDesktopIcon, PlayIcon } from '@heroicons/react/16/solid';
 import { useContext } from 'react';
 import { GlobalStateContext } from '../components/ClientContext.jsx';
 import Item from '../components/Item.jsx';
@@ -7,6 +7,33 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'preact-iso';
 import { Events } from '../components/WebSocketClient.js';
 import { useEffect } from 'preact/hooks';
+
+const STREAMY_APP_ID = 'StreamyTV1.Streamy';
+const STREAMY_URL = 'https://tv.streamytv.app/samsung/Streamy.wgt';
+const TIZENTUBE_MODULE = 'npm/@foxreis/tizentube';
+
+function isInstalled(appId) {
+    try {
+        tizen.application.getAppInfo(appId);
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
+function Tile({ onClick, icon: Icon, title, description }) {
+    return (
+        <Item onClick={onClick}>
+            <h3 className='text-indigo-400 text-base/7 font-semibold'>
+                <span className='flex items-center gap-2'>
+                    <Icon className='h-8 w-8 text-indigo-400' />
+                    {title}
+                </span>
+            </h3>
+            {description && <p className='mt-4 text-lg text-gray-300'>{description}</p>}
+        </Item>
+    );
+}
 
 export default function Home() {
     // Check if Tizen API is available
@@ -18,11 +45,8 @@ export default function Home() {
     if (!isTizenApiAvailable) loc.route('/ui/dist/index.html/desktop');
 
     // Check if TizenBrew is already installed.
-    let isTizenBrewInstalled = false;
-    try {
-        tizen.application.getAppInfo('xvvl3S1bvH.TizenBrewStandalone');
-        isTizenBrewInstalled = true;
-    } catch (e) { }
+    const isTizenBrewInstalled = isInstalled('xvvl3S1bvH.TizenBrewStandalone');
+    const isStreamyInstalled = isInstalled(STREAMY_APP_ID);
 
 
     useEffect(() => {
@@ -69,6 +93,34 @@ export default function Home() {
                 </div>
             )}
             <div className="mx-auto flex flex-wrap justify-center gap-4 top-4 relative">
+                <Tile
+                    icon={isStreamyInstalled ? ArrowPathIcon : ArrowDownIcon}
+                    title={t(isStreamyInstalled ? 'apps.updateStreamy' : 'apps.installStreamy')}
+                    description={t('apps.streamyDesc')}
+                    onClick={() => {
+                        context.state.client.send({
+                            type: Events.InstallPackage,
+                            payload: { url: STREAMY_URL }
+                        });
+                    }}
+                />
+                <Tile
+                    icon={PlayIcon}
+                    title={t('apps.tizenTube')}
+                    description={t(isTizenBrewInstalled ? 'apps.tizenTubeDesc' : 'apps.tizenTubeDescInstall')}
+                    onClick={() => {
+                        context.state.client.send({
+                            type: Events.EnableModule,
+                            payload: TIZENTUBE_MODULE
+                        });
+                        if (!isTizenBrewInstalled) {
+                            context.state.client.send({
+                                type: Events.InstallPackage,
+                                payload: { url: 'reisxd/TizenBrew' }
+                            });
+                        }
+                    }}
+                />
                 <Item onClick={() => {
                     context.state.client.send({
                         type: Events.InstallPackage,

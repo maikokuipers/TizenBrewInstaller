@@ -13,7 +13,8 @@
         "parsing": "Parsing package",
         "installing": "Installing package",
         "installed": "Package installed",
-        "installFailed": "Installation failed: {{line}}"
+        "installFailed": "Installation failed: {{line}}",
+        "moduleEnabled": "TizenTube is enabled. Open TizenBrew to start it."
     },
     "resigning": {
         "resigningRequired": "Resigning required",
@@ -55,5 +56,13 @@
         "busy": "The TV is already installing a package. Try again when it's done.",
         "emptyPackage": "The package is empty.",
         "certificateRequired": "This TV needs a Samsung certificate first. Open TizenBrew Installer on the TV and install something once to create it."
+    },
+    "apps": {
+        "installStreamy": "Install Streamy",
+        "updateStreamy": "Update Streamy",
+        "streamyDesc": "Your IPTV, films and series",
+        "tizenTube": "TizenTube",
+        "tizenTubeDesc": "YouTube without ads. Adds it to TizenBrew.",
+        "tizenTubeDescInstall": "YouTube without ads. Installs TizenBrew with TizenTube."
     }
 }

@@ -25,7 +25,8 @@ const Events = {
     ConnectToTV: 6,
     InstallFile: 7,
     GetPairingInfo: 8,
-    Received: 9
+    Received: 9,
+    EnableModule: 10
 };
 
 module.exports = {
