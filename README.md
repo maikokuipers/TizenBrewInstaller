@@ -11,7 +11,8 @@ To install TizenBrew Installer, you'll need a PC or a mobile device. Since Samsu
 ## Setup wizard (first install)
 
 Download TizenBrew Installer for your computer from the [releases](https://github.com/maikokuipers/TizenBrewInstaller/releases/latest)
-and open it. A setup wizard opens in your browser and walks you through it:
+and open it. On a Mac, unzip `TizenBrewInstaller-macos-arm64.zip` (Apple silicon) or `-x64.zip` (Intel) and open
+`TizenBrew Installer.app` with right-click > Open the first time. It quits by itself a minute after you close the browser tab. A setup wizard opens in your browser and walks you through it:
 
 1. **Choose TV**: finds the Samsung TVs on your network.
 2. **Developer mode**: shows what to enter on the TV and checks the TV's settings live.

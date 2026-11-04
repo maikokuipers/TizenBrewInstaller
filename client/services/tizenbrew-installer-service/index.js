@@ -461,9 +461,20 @@ module.exports.onStart = function () {
         });
     }
 
+    // Started as a macOS app there's no terminal to close, so quit once the browser tab has been closed for a minute.
+    const quitWhenClosed = !isTV && process.execPath.indexOf('.app/Contents/MacOS/') !== -1;
+    let quitTimer = null;
+
     wsServer.on('connection', (ws) => {
         const wsConn = new Connection(ws);
         wsClient = wsConn;
+        clearTimeout(quitTimer);
+        if (quitWhenClosed) {
+            ws.on('close', () => {
+                if (wsServer.clients.size > 0) return;
+                quitTimer = setTimeout(() => process.exit(0), 60000);
+            });
+        }
         ws.on('message', (message) => {
             let msg;
             try {
